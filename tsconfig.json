@@ -1,25 +1,50 @@
 {
+  /**
+   * 编译配置
+   * https://www.tslang.cn/docs/handbook/compiler-options.html
+   */
   "compilerOptions": {
+    /**
+     * 指定 ECMAScript 目标版本
+     * 注意： "ESNext"最新的生成目标列表为 ES proposed features https://github.com/tc39/proposals
+     */
     "target": "esnext",
+    /**
+     * 指定生成哪个模块系统代码： "None"， "CommonJS"， "AMD"， "System"， "UMD"， "ES6"或 "ES2015"
+     */
     "module": "esnext",
+    /** 启用所有严格类型检查选项 */
     "strict": true,
+    /** 在 .tsx 文件中支持 JSX. "React"或 "Preserve" */
     "jsx": "preserve",
+    /** 从 tslib 导入辅助工具函数（比如 __extends， __rest等） */
     "importHelpers": true,
+    /**
+     * 决定如何处理模块。或者是"Node"对于Node.js/io.js，或者是"Classic"（默认
+     * https://www.tslang.cn/docs/handbook/module-resolution.html
+     */
     "moduleResolution": "node",
+    /** 启用实验性的ES装饰器 */
     "experimentalDecorators": true,
     "esModuleInterop": true,
+    /** 允许从没有设置默认导出的模块中默认导入。这并不影响代码的输出，仅为了类型检查 */
     "allowSyntheticDefaultImports": true,
+    /** 生成相应的 .map文件 */
     "sourceMap": true,
+    /** 解析非相对模块名的基准目录 */
     "baseUrl": ".",
+    /** 要包含的类型声明文件名列表 */
     "types": [
       "webpack-env",
       "jest"
     ],
+    /** 模块名到基于 baseUrl的路径映射的列表 */
     "paths": {
       "@/*": [
         "src/*"
       ]
     },
+    /** 编译过程中需要引入的库文件的列表 */
     "lib": [
       "esnext",
       "dom",
@@ -27,6 +52,7 @@
       "scripthost"
     ]
   },
+  /** ts 管理的文件 */
   "include": [
     "src/**/*.ts",
     "src/**/*.tsx",
@@ -34,6 +60,7 @@
     "tests/**/*.ts",
     "tests/**/*.tsx"
   ],
+  /** ts 排除的文件 */
   "exclude": [
     "node_modules"
   ]
