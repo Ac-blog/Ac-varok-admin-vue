@@ -11,7 +11,7 @@
         <template slot="title">
           <i class="el-icon-message"></i>资源管理
         </template>
-        <router-link class="nav-link" to="/dashboard">
+        <router-link class="nav-link" to="/articleManager">
           <el-menu-item index="1-1">文章管理</el-menu-item>
         </router-link>
       </el-submenu>
