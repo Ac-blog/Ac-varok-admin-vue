@@ -27,8 +27,8 @@ export default class Header extends Vue {
 <style lang="less" scoped>
   .el-header {
     width: 100%;
-    background-color: #B3C0D1;
-    color: #333;
     line-height: 60px;
+    color: #333;
+    background-color: #e7e7e7;
   }
 </style>

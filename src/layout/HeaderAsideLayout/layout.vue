@@ -1,8 +1,8 @@
 <template>
 <div class="app-wapper">
-  <el-container style="height: 500px; border: 1px solid #eee">
+  <el-container>
     <Aside />
-    <el-container>
+    <el-container class="inner-container">
       <Header />
       <el-main>
         <router-view></router-view>
@@ -23,13 +23,7 @@ import { Header, Aside } from '../components'
   },
 })
 export default class Layout extends Vue {
-  private item = {
-      date: '2016-05-02',
-      name: '王小虎',
-      address: '上海市普陀区金沙江路 1518 弄',
-  }
 
-  private tableData: string[] = Array(20).fill(this.item)
 }
 </script>
 
@@ -40,7 +34,11 @@ export default class Layout extends Vue {
   /deep/.el-container {
     flex-wrap: wrap;
     border: none!important;
+    width: 100%;
     height: 100%!important;
+    .inner-container {
+      width: calc(100% - 200px);
+    }
     .el-main {
       height: calc(100% - 60px);
     }
