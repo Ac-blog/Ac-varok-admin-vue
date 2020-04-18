@@ -20,7 +20,7 @@
           <el-button
             class="send-article-btn"
             type="primary"
-            @click="$router.push('/assetsManager/article/add')"
+            @click="$router.push('/articleManager/add')"
             v-if="true"
           >
             去发文
@@ -77,8 +77,15 @@
         <el-table-column prop="updated" label="更新时间" width="120"> </el-table-column>
         <el-table-column fixed="right" label="操作">
           <template slot-scope="scope">
-            <el-button @click="handleClick(scope.row)" type="text">查看</el-button>
-            <el-button type="text">编辑</el-button>
+            <el-button
+              v-if="!scope.row.release"
+              @click="publishTheArticle(scope.row.id)"
+              type="text"
+            >
+              取消发布
+            </el-button>
+            <el-button v-else @click="cancelTheArticle(scope.row.id)" type="text">发布</el-button>
+            <el-button type="text" @click="$router.push('/aritcleManager/edit')">编辑</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -144,8 +151,25 @@ export default class ArticleManager extends Vue {
     }
   }
 
+  /**
+   * 过滤触发方法
+   */
   handleFilterEvent(opt: FilterOption) {
     console.log('opt.withDebounce')
+  }
+
+  /**
+   * 发布文章
+   */
+  publishTheArticle(articleId: number) {
+    console.log(articleId)
+  }
+
+  /**
+   * 取消发布文章
+   */
+  cancelTheArticle(articleId: number) {
+    console.log(articleId)
   }
 }
 </script>
@@ -231,7 +255,10 @@ export default class ArticleManager extends Vue {
         }
       }
       .el-button--text {
-        color: @colorPrimary;
+        color: @colorNormal;
+        &:hover {
+          color: @colorPrimary;
+        }
       }
     }
   }
