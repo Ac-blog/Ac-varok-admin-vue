@@ -8,7 +8,7 @@
         <el-dropdown-item>删除</el-dropdown-item>
       </el-dropdown-menu>
     </el-dropdown>
-    <span>王小虎</span>
+    <span class="user-name">Allen 周嘉炜</span>
   </el-header>
 </template>
 
@@ -18,17 +18,21 @@ import { Vue, Component } from 'vue-property-decorator'
 @Component({
   name: 'Header',
 })
-
-export default class Header extends Vue {
-
-}
+export default class Header extends Vue {}
 </script>
 
 <style lang="less" scoped>
-  .el-header {
-    width: 100%;
-    line-height: 60px;
-    color: #333;
-    background-color: #e7e7e7;
+@import '~@/styles/var.less';
+.el-header {
+  width: 100%;
+  line-height: 60px;
+  color: @colorMain;
+  background-color: @black_level_1;
+  /deep/.el-dropdown {
+    color: @white;
   }
+  .user-name {
+    color: @white;
+  }
+}
 </style>

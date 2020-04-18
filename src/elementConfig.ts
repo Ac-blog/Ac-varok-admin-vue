@@ -15,6 +15,14 @@ import {
   TableColumn,
   Container,
   Submenu,
+  Row,
+  Col,
+  Form,
+  FormItem,
+  Select,
+  Input,
+  Option,
+  OptionGroup,
 } from 'element-ui'
 
 Vue.use(Button)
@@ -31,5 +39,11 @@ Vue.use(Table)
 Vue.use(TableColumn)
 Vue.use(Container)
 Vue.use(Submenu)
-
-
+Vue.use(Row)
+Vue.use(Col)
+Vue.use(Form)
+Vue.use(FormItem)
+Vue.use(Select)
+Vue.use(Input)
+Vue.use(Option)
+Vue.use(OptionGroup)
