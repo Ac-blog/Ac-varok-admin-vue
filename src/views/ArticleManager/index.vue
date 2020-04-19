@@ -29,7 +29,7 @@
       </el-row>
       <el-row :gutter="20" style="margin-top: 24px;" class="filter-form-wrap">
         <el-form ref="form" :model="filterFormData" label-width="80px" label-suffix=": ">
-          <el-col :span="8">
+          <el-col :span="6">
             <el-form-item label="文章标题">
               <el-input
                 v-model="filterFormData.title"
@@ -43,9 +43,13 @@
               ></el-input>
             </el-form-item>
           </el-col>
-          <el-col :span="8">
+          <el-col :span="6">
             <el-form-item label="文章类型">
-              <el-select v-model="filterFormData.article_channel" @change="handleFilterEvent">
+              <el-select
+                style="width: 100%;"
+                v-model="filterFormData.article_channel"
+                @change="handleFilterEvent"
+              >
                 <el-option
                   v-for="item in channelOptions"
                   :key="item.id"
@@ -59,7 +63,7 @@
         </el-form>
       </el-row>
     </div>
-    <div class="article-list" style="margin-top: 24px;">
+    <div class="article-list" style="margin-top: 34px;">
       <el-table :data="articleData" style="width: 100%">
         <el-table-column fixed prop="release" label="状态" width="80">
           <template slot-scope="scope">
