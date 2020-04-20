@@ -23,6 +23,7 @@ import {
   Input,
   Option,
   OptionGroup,
+  Pagination,
 } from 'element-ui'
 
 Vue.use(Button)
@@ -47,3 +48,4 @@ Vue.use(Select)
 Vue.use(Input)
 Vue.use(Option)
 Vue.use(OptionGroup)
+Vue.use(Pagination)
