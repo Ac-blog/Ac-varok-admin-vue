@@ -113,6 +113,13 @@ interface FilterOption {
   withDebounce?: boolean
 }
 
+interface FilterFormDataInterface {
+  page: number
+  size: number
+  title?: string
+  article_channel?: number | string
+}
+
 @Component({
   name: 'ArticleManager',
   components: {
@@ -154,7 +161,7 @@ export default class ArticleManager extends Vue {
   private pageBean: any = {}
 
   // 过滤表单
-  private filterFormData: object = {
+  private filterFormData: FilterFormDataInterface = {
     page: 1,
     size: 10,
     title: '',
@@ -206,7 +213,7 @@ export default class ArticleManager extends Vue {
   }
 
   queryUpdate() {
-    let query = Object.assign({}, this.filterFormData)
+    const query: any = Object.assign({}, this.filterFormData)
     this.$router.push({
       query,
     })
@@ -252,7 +259,7 @@ export default class ArticleManager extends Vue {
   /**
    * 初始化
    */
-  init(query) {
+  init(query: any) {
     this.fetchLatestArticleList(query)
   }
 }
