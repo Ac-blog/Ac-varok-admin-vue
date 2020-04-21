@@ -11,7 +11,7 @@
             @click="articleStatusFilter(item.value, index)"
           >
             <span v-if="item.value !== ''" class="total-num" :class="item.customClass">{{
-              item.value === 1 ? 100 : 100
+              item.value === 1 ? publishedNum : unpublishedNum
             }}</span>
             {{ item.text }}
           </div>
@@ -29,7 +29,7 @@
       </el-row>
       <el-row :gutter="20" style="margin-top: 24px;" class="filter-form-wrap">
         <el-form ref="form" :model="filterFormData" label-width="80px" label-suffix=": ">
-          <el-col :span="8">
+          <el-col :span="6">
             <el-form-item label="文章标题">
               <el-input
                 v-model="filterFormData.title"
@@ -43,9 +43,13 @@
               ></el-input>
             </el-form-item>
           </el-col>
-          <el-col :span="8">
+          <el-col :span="6">
             <el-form-item label="文章类型">
-              <el-select v-model="filterFormData.article_channel" @change="handleFilterEvent">
+              <el-select
+                style="width: 100%;"
+                v-model="filterFormData.article_channel"
+                @change="handleFilterEvent"
+              >
                 <el-option
                   v-for="item in channelOptions"
                   :key="item.id"
@@ -59,7 +63,7 @@
         </el-form>
       </el-row>
     </div>
-    <div class="article-list" style="margin-top: 24px;">
+    <div class="article-list" style="margin-top: 34px;">
       <el-table :data="articleData" style="width: 100%">
         <el-table-column fixed prop="release" label="状态" width="80">
           <template slot-scope="scope">
@@ -89,16 +93,17 @@
           </template>
         </el-table-column>
       </el-table>
+      <Pagination :pageBean="pageBean" @to-page="toPage" />
     </div>
   </div>
 </template>
 
 <script lang="ts">
 // @ is an alias to /src
-import { Component, Vue } from 'vue-property-decorator'
+import { Component, Vue, Watch } from 'vue-property-decorator'
 import { getArticleList } from '@/http/apis/articleManager'
 import channelOptions from '@/config/articleChannelOptions'
-// console.log(channelOptions)
+import { Pagination } from '@/components'
 interface ArticleList {
   success: boolean
   results: object
@@ -108,9 +113,18 @@ interface FilterOption {
   withDebounce?: boolean
 }
 
+interface FilterFormDataInterface {
+  page: number
+  size: number
+  title?: string
+  article_channel?: number | string
+}
+
 @Component({
   name: 'ArticleManager',
-  components: {},
+  components: {
+    Pagination,
+  },
 })
 export default class ArticleManager extends Vue {
   // 头部操作栏目
@@ -134,28 +148,90 @@ export default class ArticleManager extends Vue {
 
   private currentStatusItemIndex: number = 0
 
+  // 文章分类配置
   private channelOptions: any[] = channelOptions
 
+  // 已发布文章数
+  private publishedNum: number = 0
+
+  // 未发布文章数
+  private unpublishedNum: number = 0
+
+  // 分页器数据
+  private pageBean: any = {}
+
   // 过滤表单
-  private filterFormData: object = {
+  private filterFormData: FilterFormDataInterface = {
+    page: 1,
+    size: 10,
     title: '',
     article_channel: '',
   }
 
   private articleData: any[] = []
 
-  public async created(): Promise<void> {
-    const articleListRes: any = await getArticleList()
+  // debounceTimer
+  private debounceTimer: any = null
+
+  @Watch('$route', {
+    immediate: true,
+  })
+  onrRouteChange(to: any, from: any) {
+    /** 监听 Router 动态路由参数的变化，调整 tab 切换的数据  */
+    this.init(to.query)
+  }
+
+  /**
+   * 函数防抖
+   * @param {function} fn - 执行函数
+   * @param {number} wait - 等待时间
+   */
+  debounce(fn: any, wait = 300) {
+    if (this.debounceTimer) {
+      clearTimeout(this.debounceTimer)
+    }
+    this.debounceTimer = setTimeout(() => {
+      fn()
+      this.debounceTimer = null
+    }, wait)
+  }
+
+  /**
+   * 获取文章列表
+   */
+  async fetchLatestArticleList(query: any): Promise<void> {
+    const articleListRes: any = await getArticleList({
+      ...this.filterFormData,
+      ...query,
+    })
     if (articleListRes.success) {
       this.articleData = articleListRes.data.items
+      this.publishedNum = articleListRes.data.publishedNum
+      this.unpublishedNum = articleListRes.data.unpublishedNum
+      this.pageBean = articleListRes.data.pageBean
     }
+  }
+
+  queryUpdate() {
+    const query: any = Object.assign({}, this.filterFormData)
+    this.$router.push({
+      query,
+    })
   }
 
   /**
    * 过滤触发方法
    */
   handleFilterEvent(opt: FilterOption) {
-    console.log('opt.withDebounce')
+    this.$nextTick(() => {
+      if (opt.withDebounce) {
+        this.debounce(() => {
+          this.queryUpdate()
+        }, 300)
+      } else {
+        this.queryUpdate()
+      }
+    })
   }
 
   /**
@@ -170,6 +246,21 @@ export default class ArticleManager extends Vue {
    */
   cancelTheArticle(articleId: number) {
     console.log(articleId)
+  }
+
+  /**
+   * 分页
+   */
+  toPage(page: number) {
+    this.filterFormData.page = page
+    this.queryUpdate()
+  }
+
+  /**
+   * 初始化
+   */
+  init(query: any) {
+    this.fetchLatestArticleList(query)
   }
 }
 </script>

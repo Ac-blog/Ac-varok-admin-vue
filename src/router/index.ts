@@ -1,8 +1,8 @@
-import Vue from 'vue';
-import VueRouter, { RouteConfig } from 'vue-router';
+import Vue from 'vue'
+import VueRouter, { RouteConfig } from 'vue-router'
 import HeaderAsideLayout from '@/layout/HeaderAsideLayout'
 
-Vue.use(VueRouter);
+Vue.use(VueRouter)
 
 const routes: RouteConfig[] = [
   {
@@ -17,6 +17,12 @@ const routes: RouteConfig[] = [
         component: () => import(/* webpackChunkName: "ArticleManager" */ '../views/ArticleManager'),
       },
       {
+        path: '/articleManager/add',
+        name: 'AddArticle',
+        component: () =>
+          import(/* webpackChunkName: "AddArticle" */ '../views/ArticleManager/AddArticle.vue'),
+      },
+      {
         path: '/about',
         name: 'About',
         // route level code-splitting
@@ -26,13 +32,12 @@ const routes: RouteConfig[] = [
       },
     ],
   },
-
-];
+]
 
 const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
   routes,
-});
+})
 
-export default router;
+export default router
