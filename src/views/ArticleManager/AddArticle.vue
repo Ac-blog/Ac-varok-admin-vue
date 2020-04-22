@@ -87,7 +87,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator'
+import { Component, Vue, Watch } from 'vue-property-decorator'
 import channelOptions from '@/config/articleChannelOptions'
 import { TinyEditor } from '@/components'
 
@@ -135,6 +135,14 @@ export default class AddArticleVue extends Vue {
   // 是否已经发布
   get isPublished(): boolean {
     return true
+  }
+
+  @Watch('$route', {
+    immediate: true,
+  })
+  onRouteChange(to: any, from: any) {
+    // 新建 or 编辑
+    this.isEdit = to.path.indexOf('/edit/') !== -1
   }
 
   // 富文本编辑器初始化完成回调

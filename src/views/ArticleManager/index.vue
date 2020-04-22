@@ -83,13 +83,15 @@
           <template slot-scope="scope">
             <el-button
               v-if="!scope.row.release"
-              @click="publishTheArticle(scope.row.id)"
+              @click="publishTheArticle(scope.row._id)"
               type="text"
             >
               取消发布
             </el-button>
-            <el-button v-else @click="cancelTheArticle(scope.row.id)" type="text">发布</el-button>
-            <el-button type="text" @click="$router.push('/aritcleManager/edit')">编辑</el-button>
+            <el-button v-else @click="cancelTheArticle(scope.row._id)" type="text">发布</el-button>
+            <el-button type="text" @click="$router.push(`/articleManager/edit/${scope.row._id}`)"
+              >编辑</el-button
+            >
           </template>
         </el-table-column>
       </el-table>
