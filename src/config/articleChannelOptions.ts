@@ -1,4 +1,4 @@
-const channelOptions = [
+const channelOptions: any[] = [
   {
     id: '',
     name: '全部',
