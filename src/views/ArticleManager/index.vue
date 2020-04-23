@@ -133,7 +133,7 @@ interface FilterFormDataInterface {
   },
   filters: {
     channelOptionsFilter(value: string | number): string {
-      return channelOptions.find((item: any) => item.id === value)['name']
+      return channelOptions.find((item: any) => item.id === value).name
     },
   },
 })
