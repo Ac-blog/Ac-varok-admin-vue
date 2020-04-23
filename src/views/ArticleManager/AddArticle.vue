@@ -18,8 +18,9 @@
         ref="articleForm"
         class="article-form"
         :model="articleForm"
+        :rules="rules"
         label-suffix=":"
-        label-width="80px"
+        label-width="90px"
       >
         <div class="form-items">
           <!-- 文章标题 -->
@@ -90,11 +91,14 @@
 import { Component, Vue, Watch } from 'vue-property-decorator'
 import channelOptions from '@/config/articleChannelOptions'
 import { TinyEditor } from '@/components'
+import { addArticle, updateArticle } from '@/http/apis/articleManager'
 
 interface ArticleFormInterface {
   title: string
   author: string
   articleType: number | string
+  release: boolean
+  body?: string
 }
 
 interface TinyEditorInterface {
@@ -113,6 +117,7 @@ export default class AddArticleVue extends Vue {
    */
   public $refs!: {
     editor: TinyEditor
+    articleForm: HTMLFormElement
   }
 
   private isEdit: boolean = false
@@ -124,6 +129,8 @@ export default class AddArticleVue extends Vue {
     title: '',
     author: '',
     articleType: '',
+    release: false,
+    body: '',
   }
 
   // 富文本编辑器
@@ -132,11 +139,23 @@ export default class AddArticleVue extends Vue {
     isInitFinished: false,
   }
 
-  // 是否已经发布
-  get isPublished(): boolean {
-    return true
+  // 表单规则
+  private rules = {
+    title: [{ required: true, message: '请输入文章标题', trigger: 'blur' }],
+    author: [{ required: true, message: '请输入文章作者', trigger: 'blur' }],
+    articleType: [{ required: true, message: '请选择文章类型', trigger: 'change' }],
   }
 
+  // 当前编辑的文章 Id
+  private currentSavedArticleId: string | number = ''
+
+  /** computed */
+  // 是否已经发布
+  get isPublished(): boolean {
+    return this.articleForm.release
+  }
+
+  /** watch */
   @Watch('$route', {
     immediate: true,
   })
@@ -145,9 +164,23 @@ export default class AddArticleVue extends Vue {
     this.isEdit = to.path.indexOf('/edit/') !== -1
   }
 
+  /** methods */
   // 富文本编辑器初始化完成回调
   tinyEditorInitFinished() {
     console.log('初始化完成')
+  }
+
+  /**
+   * 表单提交数据预处理
+   * @param {boolean} release - 是否已经发布
+   */
+  formdataProcessing(release: boolean) {
+    // 文章发布状态
+    this.articleForm.release = release
+    console.log('release', this.articleForm.release)
+    // 文章内容
+    this.articleForm.body = this.$refs.editor.getContent()
+    console.log('body', this.articleForm.body)
   }
 
   /**
@@ -156,10 +189,32 @@ export default class AddArticleVue extends Vue {
    * @param {boolean} isJump - 是否跳转到列表页 跳转 true | 停在本页 false
    */
   handleFormdataSubmit(release: boolean, isJump: boolean) {
-    const editorEl = this.$refs.editor
-    console.log('release', release)
     console.log('isJump', isJump)
-    console.log('body', editorEl.getContent())
+    this.formdataProcessing(release)
+    this.$refs.articleForm.validate(async (valid: any) => {
+      if (valid) {
+        const submitRes: any = await (this.isEdit ? addArticle : addArticle)({
+          ...this.articleForm,
+        })
+        if (submitRes.success) {
+          this.$message({
+            message: isJump ? submitRes.message : '已保存成功！可点击预览。',
+            type: 'success',
+            duration: 1000,
+            onClose: () => {
+              if (isJump) {
+                this.$router.push({ path: '/articleManager' })
+              } else {
+                this.currentSavedArticleId = submitRes.results.article_id || this.$route.params.id
+                this.$router.push({
+                  path: `/articleManager/edit/${this.currentSavedArticleId}`,
+                })
+              }
+            },
+          })
+        }
+      }
+    })
   }
 }
 </script>
