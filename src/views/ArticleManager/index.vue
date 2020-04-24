@@ -90,9 +90,11 @@
               @click="publishTheArticle(scope.row._id)"
               type="text"
             >
-              取消发布
+              发布
             </el-button>
-            <el-button v-else @click="cancelTheArticle(scope.row._id)" type="text">发布</el-button>
+            <el-button v-else @click="unPublishTheArticle(scope.row._id)" type="text"
+              >取消发布</el-button
+            >
             <el-button type="text" @click="$router.push(`/articleManager/edit/${scope.row._id}`)"
               >编辑</el-button
             >
@@ -110,6 +112,8 @@ import { Component, Vue, Watch } from 'vue-property-decorator'
 import { getArticleList } from '@/http/apis/articleManager'
 import channelOptions from '@/config/articleChannelOptions'
 import { Pagination } from '@/components'
+import { publishArticle, unpublishArticle } from '@/http/apis/articleManager'
+
 interface ArticleList {
   success: boolean
   results: object
@@ -248,15 +252,30 @@ export default class ArticleManager extends Vue {
   /**
    * 发布文章
    */
-  publishTheArticle(articleId: number) {
-    console.log(articleId)
+  async publishTheArticle(articleId: number): Promise<void> {
+    const self = this
+    const res: any = await publishArticle({
+      _id: articleId,
+    })
+    if (res.success) {
+      // 发布成功
+      self.fetchLatestArticleList(self.filterFormData)
+    }
   }
 
   /**
    * 取消发布文章
    */
-  cancelTheArticle(articleId: number) {
+  async unPublishTheArticle(articleId: number) {
     console.log(articleId)
+    const self = this
+    const res: any = await unpublishArticle({
+      _id: articleId,
+    })
+    if (res.success) {
+      // 取消发布成功
+      self.fetchLatestArticleList(self.filterFormData)
+    }
   }
 
   /**
