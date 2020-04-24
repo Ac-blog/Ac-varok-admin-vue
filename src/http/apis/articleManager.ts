@@ -75,3 +75,17 @@ export const unpublishArticle = (payload: UnpublishArticleInterface) => {
     payload,
   })
 }
+
+/**
+ * 获取文章详情页
+ */
+interface ArticleDetailInterface {
+  _id: string
+}
+export const articleDetail = (payload: ArticleDetailInterface) => {
+  return $http({
+    method: 'get',
+    url: `/admin/v1/article/${payload._id}`,
+    payload,
+  })
+}

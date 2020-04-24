@@ -91,7 +91,7 @@
 import { Component, Vue, Watch } from 'vue-property-decorator'
 import channelOptions from '@/config/articleChannelOptions'
 import { TinyEditor } from '@/components'
-import { addArticle, updateArticle } from '@/http/apis/articleManager'
+import { addArticle, updateArticle, articleDetail } from '@/http/apis/articleManager'
 
 interface ArticleFormInterface {
   title: string
@@ -165,9 +165,32 @@ export default class AddArticleVue extends Vue {
   }
 
   /** methods */
-  // 富文本编辑器初始化完成回调
+  /**
+   * 获取文章详情页
+   */
+  async fetchArticleDetail(id: string): Promise<void> {
+    const res: any = await articleDetail({
+      _id: id,
+    })
+    if (res.success) {
+      Object.assign(this.articleForm, res.results)
+      // 富文本编辑器内容回显
+      if (this.articleForm.body) {
+        this.$refs.editor.setContent(this.articleForm.body)
+      }
+    }
+  }
+
+  /**
+   * 富文本编辑器初始化完成回调
+   */
   tinyEditorInitFinished() {
     console.log('初始化完成')
+    if (this.isEdit) {
+      console.log(this.isEdit)
+      console.log(this.$route.params.id)
+      this.fetchArticleDetail(this.$route.params.id)
+    }
   }
 
   /**
