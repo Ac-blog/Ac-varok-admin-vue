@@ -38,7 +38,7 @@ interface UpdateArticleInterface {
   articleType: number | string
   release: boolean
   body?: string
-  _id: number | string
+  _id?: string
 }
 export const updateArticle = (payload: UpdateArticleInterface) => {
   return $http({

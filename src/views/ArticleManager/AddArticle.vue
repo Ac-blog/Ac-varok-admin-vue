@@ -216,12 +216,12 @@ export default class AddArticleVue extends Vue {
     this.formdataProcessing(release)
     this.$refs.articleForm.validate(async (valid: any) => {
       if (valid) {
-        const submitRes: any = await (this.isEdit ? addArticle : addArticle)({
+        const submitRes: any = await (this.isEdit ? updateArticle : addArticle)({
           ...this.articleForm,
         })
         if (submitRes.success) {
           this.$message({
-            message: isJump ? submitRes.message : '已保存成功！可点击预览。',
+            message: '已保存成功！',
             type: 'success',
             duration: 1000,
             onClose: () => {
