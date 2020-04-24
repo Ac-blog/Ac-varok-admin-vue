@@ -23,6 +23,12 @@ const routes: RouteConfig[] = [
           import(/* webpackChunkName: "AddArticle" */ '../views/ArticleManager/AddArticle.vue'),
       },
       {
+        path: '/articleManager/edit/:id',
+        name: 'AddArticle',
+        component: () =>
+          import(/* webpackChunkName: "AddArticle" */ '../views/ArticleManager/AddArticle.vue'),
+      },
+      {
         path: '/about',
         name: 'About',
         // route level code-splitting

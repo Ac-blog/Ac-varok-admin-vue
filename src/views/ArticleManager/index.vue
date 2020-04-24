@@ -72,24 +72,30 @@
             }}</span>
           </template>
         </el-table-column>
-        <el-table-column prop="title" label="标题" width="150"> </el-table-column>
+        <el-table-column prop="title" label="标题"></el-table-column>
         <el-table-column prop="author" label="作者" width="120"> </el-table-column>
-        <el-table-column prop="body" label="内容"> </el-table-column>
-        <el-table-column prop="articleType" label="分类" width="100"> </el-table-column>
-        <el-table-column prop="readNumber" label="阅读量"> </el-table-column>
+        <!-- <el-table-column prop="body" label="内容"> </el-table-column> -->
+        <el-table-column prop="articleType" label="分类">
+          <template slot-scope="scope">
+            {{ scope.row.articleType | channelOptionsFilter }}
+          </template>
+        </el-table-column>
+        <el-table-column prop="readNumber" label="阅读量"></el-table-column>
         <el-table-column prop="like" label="点赞量" width="120"> </el-table-column>
-        <el-table-column prop="updated" label="更新时间" width="120"> </el-table-column>
+        <el-table-column prop="updated" label="更新时间"></el-table-column>
         <el-table-column fixed="right" label="操作">
           <template slot-scope="scope">
             <el-button
               v-if="!scope.row.release"
-              @click="publishTheArticle(scope.row.id)"
+              @click="publishTheArticle(scope.row._id)"
               type="text"
             >
               取消发布
             </el-button>
-            <el-button v-else @click="cancelTheArticle(scope.row.id)" type="text">发布</el-button>
-            <el-button type="text" @click="$router.push('/aritcleManager/edit')">编辑</el-button>
+            <el-button v-else @click="cancelTheArticle(scope.row._id)" type="text">发布</el-button>
+            <el-button type="text" @click="$router.push(`/articleManager/edit/${scope.row._id}`)"
+              >编辑</el-button
+            >
           </template>
         </el-table-column>
       </el-table>
@@ -124,6 +130,11 @@ interface FilterFormDataInterface {
   name: 'ArticleManager',
   components: {
     Pagination,
+  },
+  filters: {
+    channelOptionsFilter(value: string | number): string {
+      return channelOptions.find((item: any) => item.id === value).name
+    },
   },
 })
 export default class ArticleManager extends Vue {
