@@ -68,6 +68,18 @@
               </el-form-item>
             </el-col>
           </el-row>
+          <el-row style="margin-top: 24px;" :gutter="40">
+            <!-- 封面 -->
+            <el-col :span="24">
+              <el-form-item label="封面" prop="coverImage">
+                <el-input
+                  style="width: 100%"
+                  v-model="articleForm.coverImage"
+                  placeholder="请输入"
+                ></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
           <!-- 文章正文 -->
           <el-row style="margin-top: 24px;">
             <el-col :span="24">
@@ -96,6 +108,7 @@ import { addArticle, updateArticle, articleDetail } from '@/http/apis/articleMan
 interface ArticleFormInterface {
   title: string
   author: string
+  coverImage: string
   articleType: number | string
   release: boolean
   body?: string
@@ -128,6 +141,7 @@ export default class AddArticleVue extends Vue {
   private articleForm: ArticleFormInterface = {
     title: '',
     author: '',
+    coverImage: '',
     articleType: '',
     release: false,
     body: '',
@@ -143,6 +157,7 @@ export default class AddArticleVue extends Vue {
   private rules = {
     title: [{ required: true, message: '请输入文章标题', trigger: 'blur' }],
     author: [{ required: true, message: '请输入文章作者', trigger: 'blur' }],
+    coverImage: [{ required: true, message: '请输入文章封面', trigger: 'blur' }],
     articleType: [{ required: true, message: '请选择文章类型', trigger: 'change' }],
   }
 

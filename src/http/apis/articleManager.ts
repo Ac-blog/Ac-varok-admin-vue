@@ -17,6 +17,7 @@ export const getArticleList = (payload?: any) => {
 interface AddArticleInterface {
   title: string
   author: string
+  coverImage: string
   articleType: number | string
   release: boolean
   body?: string
@@ -35,6 +36,7 @@ export const addArticle = (payload: AddArticleInterface) => {
 interface UpdateArticleInterface {
   title: string
   author: string
+  coverImage: string
   articleType: number | string
   release: boolean
   body?: string
