@@ -8,7 +8,6 @@
             :key="item.value"
             class="status-item"
             :class="{ active: index === currentStatusItemIndex }"
-            @click="articleStatusFilter(item.value, index)"
           >
             <span v-if="item.value !== ''" class="total-num" :class="item.customClass">{{
               item.value === 1 ? publishedNum : unpublishedNum
