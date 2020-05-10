@@ -36,6 +36,11 @@ const routes: RouteConfig[] = [
         // which is lazy-loaded when the route is visited.
         component: () => import(/* webpackChunkName: "about" */ '../views/About'),
       },
+      {
+        path: '/userConfig',
+        name: 'UserConfig',
+        component: () => import(/* webpackChunkName: "userConfig" */ '../views/userConfig'),
+      },
     ],
   },
 ]

@@ -13,6 +13,9 @@
           <el-menu-item index="1-1">文章管理</el-menu-item>
         </router-link>
       </el-submenu>
+      <router-link class="nav-link" to="/userConfig">
+        <el-menu-item index="2"> <i class="el-icon-user"></i><span>个人信息</span> </el-menu-item>
+      </router-link>
       <router-link class="nav-link" to="/about">
         <el-menu-item index="2"> <i class="el-icon-menu"></i><span>关于我们</span> </el-menu-item>
       </router-link>
